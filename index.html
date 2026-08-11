@@ -125,7 +125,7 @@
     </div>
 
 <script>
-    // SUPABASE CONFIG (Đã cập nhật Service Role Key chính xác)
+    // SUPABASE CONFIG
     const SUPABASE_URL = "https://bkbrddzdsvbercsyidlo.supabase.co/rest/v1";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrYnJkZHpkc3ZiZXJjc3lpZGxvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NjE3OTI1MSwiZXhwIjoyMTAxNzU1MjUxfQ.JsrmQLx5fpfkIPK2MrYE8KVNpVbxGmGaD-LfirSA4r8";
     
@@ -168,7 +168,7 @@
         const currentUrl = window.location.origin + window.location.pathname + "?success=true";
         const link4mApiUrl = `https://link4m.co/api-shorten/v2?api=${LINK4M_API}&url=${encodeURIComponent(currentUrl)}`;
 
-        fetch(link4mApiUrl)
+            fetch(link4mApiUrl)
             .then(res => res.json())
             .then(data => {
                 if (data.status === "success" && data.shortenedUrl) {
@@ -196,7 +196,7 @@
                     'Content-Type': 'application/json',
                     'Prefer': 'return=minimal'
                 },
-                body: JSON.stringify({ key_string: generatedKey })
+                body: JSON.stringify({ key_code: generatedKey })
             });
 
             if (response.ok) {
