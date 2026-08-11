@@ -125,9 +125,9 @@
     </div>
 
 <script>
-    // SUPABASE CONFIG (Đã bổ sung chuẩn đường dẫn /rest/v1)
+    // SUPABASE CONFIG (Đã cập nhật Service Role Key chính xác)
     const SUPABASE_URL = "https://bkbrddzdsvbercsyidlo.supabase.co/rest/v1";
-    const SUPABASE_ANON_KEY = "Sb_publishable_pw7SCgHbR3hlfVkGpJfZpg_f0dSzOwD";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrYnJkZHpkc3ZiZXJjc3lpZGxvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NjE3OTI1MSwiZXhwIjoyMTAxNzU1MjUxfQ.JsrmQLx5fpfkIPK2MrYE8KVNpVbxGmGaD-LfirSA4r8";
     
     // LINK4M API
     const LINK4M_API = "6a11f70c8310d07dc56c38ea";
@@ -188,7 +188,6 @@
         const generatedKey = `TRBIN-${random1}-${random2}`;
 
         try {
-            // Sửa lại đoạn gọi API trỏ thẳng vào bảng keys
             const response = await fetch(`${SUPABASE_URL}/keys`, {
                 method: 'POST',
                 headers: {
@@ -197,7 +196,7 @@
                     'Content-Type': 'application/json',
                     'Prefer': 'return=minimal'
                 },
-                body: JSON.stringify({ key_string: generatedKey }) // Đồng bộ tên cột key_string với bên App Android
+                body: JSON.stringify({ key_string: generatedKey })
             });
 
             if (response.ok) {
