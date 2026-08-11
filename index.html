@@ -50,7 +50,7 @@
 </head>
 <body>
 
-    <!-- BƯỚC 1: MÀN HÌNH CHÍNH (ẢNH 1) -->
+    <!-- BƯỚC 1: MÀN HÌNH CHÍNH -->
     <div class="card" id="main-card">
         <div class="card-header">
             <div class="title-group">
@@ -77,7 +77,7 @@
         </button>
     </div>
 
-    <!-- POPUP XÁC MINH NHIỆM VỤ (ẢNH 2) -->
+    <!-- POPUP XÁC MINH NHIỆM VỤ -->
     <div class="modal-overlay hidden" id="task-modal">
         <div class="modal-box">
             <h3>Xác minh bảo mật</h3>
@@ -125,8 +125,8 @@
     </div>
 
 <script>
-    // SUPABASE CONFIG
-    const SUPABASE_URL = "https://bkbrddzdsvbercsyidlo.supabase.co";
+    // SUPABASE CONFIG (Đã bổ sung chuẩn đường dẫn /rest/v1)
+    const SUPABASE_URL = "https://bkbrddzdsvbercsyidlo.supabase.co/rest/v1";
     const SUPABASE_ANON_KEY = "Sb_publishable_pw7SCgHbR3hlfVkGpJfZpg_f0dSzOwD";
     
     // LINK4M API
@@ -188,7 +188,8 @@
         const generatedKey = `TRBIN-${random1}-${random2}`;
 
         try {
-            const response = await fetch(`${SUPABASE_URL}/rest/v1/keys`, {
+            // Sửa lại đoạn gọi API trỏ thẳng vào bảng keys
+            const response = await fetch(`${SUPABASE_URL}/keys`, {
                 method: 'POST',
                 headers: {
                     'apikey': SUPABASE_ANON_KEY,
@@ -196,7 +197,7 @@
                     'Content-Type': 'application/json',
                     'Prefer': 'return=minimal'
                 },
-                body: JSON.stringify({ key_code: generatedKey })
+                body: JSON.stringify({ key_string: generatedKey }) // Đồng bộ tên cột key_string với bên App Android
             });
 
             if (response.ok) {
