@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TrBinzz Mod Game - Panel Get Key</title>
-    <!-- THÊM THƯ VIỆN SUPABASE SDK -->
+    <!-- THƯ VIỆN SUPABASE SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -127,9 +127,8 @@
     </div>
 
 <script>
-    // SUPABASE CONFIG (Tối ưu kết nối chuẩn)
+    // SUPABASE CONFIG
     const SUPABASE_URL = "https://bkbrddzdsvbercsyidlo.supabase.co";
-    // KHUYÊN DÙNG: Hãy đổi key bên dưới sang 'anon public key' trong Settings -> API của Supabase để an toàn nhất
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrYnJkZHpkc3ZiZXJjc3lpZGxvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NjE3OTI1MSwiZXhwIjoyMTAxNzU1MjUxfQ.JsrmQLx5fpfkIPK2MrYE8KVNpVbxGmGaD-LfirSA4r8";
     
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -140,25 +139,18 @@
     let task1Done = false;
     let task2Done = false;
 
+    // Khi người dùng vượt link xong quay lại (có ?success=true)
     window.onload = async function() {
         const urlParams = new URLSearchParams(window.location.search);
-        const token = urlParams.get('token');
-        const sessionToken = sessionStorage.getItem('verify_token');
-
-        // BẢO VỆ CHỐNG BYPASS: Chỉ cấp key nếu có token hợp lệ và đúng phiên làm việc
-        if (token && sessionToken && token === sessionToken) {
-            // Xóa token ngay lập tức để không reload/bypass lại được
-            sessionStorage.removeItem('verify_token');
-            window.history.replaceState({}, document.title, window.location.pathname);
-
+        if (urlParams.get('success') === 'true') {
             document.getElementById('main-card').classList.add('hidden');
             document.getElementById('success-card').classList.remove('hidden');
 
+            // Tạo và lưu key mới vào Supabase ngay lập tức
             await createAndSaveKey();
-        } else if (urlParams.get('success') === 'true' || token) {
-            // Kẻ xấu cố tình gõ ?success=true hoặc dùng token cũ -> Đuổi về trang chủ
-            alert("⚠️ Phát hiện hành vi Bypass! Vui lòng vượt link hợp lệ.");
-            window.location.href = window.location.pathname;
+            
+            // Xóa chữ ?success=true trên thanh địa chỉ cho sạch giao diện
+            window.history.replaceState({}, document.title, window.location.pathname);
         }
     };
 
@@ -181,13 +173,8 @@
     }
 
     function startShortLink() {
-        // Tạo Token ngẫu nhiên cho phiên vượt link này
-        const oneTimeToken = 'TK_' + Math.random().toString(36).substring(2, 12) + Date.now();
-        
-        // Lưu token vào SessionStorage để đối chiếu lúc quay lại
-        sessionStorage.setItem('verify_token', oneTimeToken);
-
-        const currentUrl = window.location.origin + window.location.pathname + "?token=" + oneTimeToken;
+        // Link đích cực kỳ gọn gàng, chỉ có ?success=true
+        const currentUrl = window.location.origin + window.location.pathname + "?success=true";
         const link4mApiUrl = `https://link4m.co/api-shorten/v2?api=${LINK4M_API}&url=${encodeURIComponent(currentUrl)}`;
 
         fetch(link4mApiUrl)
@@ -217,7 +204,6 @@
             if (!error) {
                 document.getElementById('key-display').innerText = generatedKey;
             } else {
-                console.error(error);
                 document.getElementById('key-display').innerText = "LỖI LƯU KEY";
             }
         } catch (error) {
@@ -233,14 +219,6 @@
             });
         }
     }
-
-    // CHỐNG F12 & CHUỘT PHẢI CƠ BẢN
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    document.onkeydown = function(e) {
-        if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74))) {
-            return false;
-        }
-    };
 </script>
 
 </body>
